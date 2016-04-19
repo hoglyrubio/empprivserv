@@ -5,9 +5,9 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import net.viralpatel.java.CSVLoader;
 
@@ -24,7 +24,7 @@ public class Aplicacion {
 	
 	public static DriverManagerDataSource dataSource;
 	public static JdbcTemplate jdbcTemplate;
-	public static Connection conn;  
+	public static Connection connection;  
 	
 	public static void main(String[] args) throws Exception {
 	
@@ -32,7 +32,7 @@ public class Aplicacion {
 		
 		dataSource = (DriverManagerDataSource) context.getBean("dataSource");
 		jdbcTemplate = (JdbcTemplate) context.getBean("jdbcTemplate");
-		conn = jdbcTemplate.getDataSource().getConnection();
+		connection = jdbcTemplate.getDataSource().getConnection();
 		
 		/* EJEMPLO DE FUNCIONAMIENTO
 		importarInforme(201208, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/BH+/BH201208+.csv");
@@ -44,27 +44,94 @@ public class Aplicacion {
 		//importarInforme(201311, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/BH+/BH201311+.csv");
 		//importarInforme(201312, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/BH+/BH201312+.csv");
 		
+		/* Importacion hasta 2013
 		List<Integer> periodos = new ArrayList<Integer>();
-		//periodos.add(201311);
+		periodos.add(201309);
+		periodos.add(201310);
+		periodos.add(201311);
 		periodos.add(201312);
+		periodos.add(201401);
+		periodos.add(201402);
+		periodos.add(201403);
+		periodos.add(201404);
+		periodos.add(201405);
+		periodos.add(201406);
+		periodos.add(201407);
+		periodos.add(201408);
+		periodos.add(201409);
+		periodos.add(201410);
+		periodos.add(201411);
+		periodos.add(201412);
+		periodos.add(201501);
+		periodos.add(201502);
+		periodos.add(201503);
+		periodos.add(201504);
+		periodos.add(201505);
+		periodos.add(201506);
+		periodos.add(201507);
+		periodos.add(201508);
 		for (Integer periodo : periodos) {
 			genSuiAcu(periodo);
 			genCsvAcu(periodo);
-			exportarCsv(periodo, "ACU", "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/CSV/acu%s.csv");
-			
+			exportarCsv(periodo, "ACU",
+					"/Volumes/Datos/TRABAJO/INFORME/CSV/acu%s.csv");
+
 			genSuiAlc(periodo);
 			genCsvAlc(periodo);
-			exportarCsv(periodo, "ALC", "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/CSV/alc%s.csv");
-		}
+			exportarCsv(periodo, "ALC",
+					"/Volumes/Datos/TRABAJO/INFORME/CSV/alc%s.csv");
+		}*/
+	
+		// Importación 2014 y 2015
+		process(201401, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201402, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201403, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201404, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201405, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201406, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201407, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201408, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201409, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201410, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201411, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201412, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		
+		process(201501, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201502, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201503, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201504, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201505, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201506, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201507, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201508, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201509, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201510, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201511, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");
+		process(201512, "/Volumes/Datos/TRABAJO/EmpPrivServ/INFORME/2013-2014-2015/BH2013+2015 ARREGLADO/BH%s.CSV");		
+	}
+	
+	public static void process(Integer periodo, String inputMask) throws Exception {
+		
+		String inputFile = String.format(inputMask, periodo);
+		
+		importarInforme(periodo, inputFile);
+		
+		genSuiAcu(periodo);
+		genCsvAcu(periodo);
+		exportarCsv(periodo, "ACU", "/Volumes/Datos/TRABAJO/INFORME/CSV/acu%s.csv");
+		
+		genSuiAlc(periodo);
+		genCsvAlc(periodo);
+		exportarCsv(periodo, "ALC", "/Volumes/Datos/TRABAJO/INFORME/CSV/alc%s.csv");
 	}
 
 	public static void importarInforme(Integer periodo, String archivo) throws Exception {
 		log.info("importarInforme " + periodo + " " + archivo + " CSV -> DB");
-		CSVLoader csvLoader = new CSVLoader(conn);
+		CSVLoader csvLoader = new CSVLoader(connection);
 		csvLoader.loadCSV(archivo, "INFORME_TMP_V2", true);
 		
 		log.info("importarInforme " + periodo + " " + archivo + " pasaInforme_v2()");
-		CallableStatement statement = conn.prepareCall("{call pasaInforme_v2(?)}");
+		CallableStatement statement = connection.prepareCall("{call pasaInforme_v2(?)}");
 		statement.setInt(1, periodo);	
 		statement.executeUpdate();	
 	}
@@ -76,7 +143,7 @@ public class Aplicacion {
 	 */
 	public static void genSuiAcu(Integer periodo) throws Exception {
 		System.out.print("genSuiAcu(" + periodo + ")");
-		CallableStatement statement = conn.prepareCall("{call genSuiAcu(?, ?, ?)}");
+		CallableStatement statement = connection.prepareCall("{call genSuiAcu(?, ?, ?)}");
 		statement.setInt(1, periodo);
 		statement.setInt(2, (Integer) periodo / 100);
 		statement.setInt(3, (Integer) periodo % 100);
@@ -90,7 +157,7 @@ public class Aplicacion {
 	 */
 	public static void genSuiAlc(Integer periodo) throws Exception {
 		System.out.print("genSuiAlc(" + periodo + ")");
-		CallableStatement statement = conn.prepareCall("{call genSuiAlc(?, ?, ?)}");
+		CallableStatement statement = connection.prepareCall("{call genSuiAlc(?, ?, ?)}");
 		statement.setInt(1, periodo);
 		statement.setInt(2, (Integer) periodo / 100);
 		statement.setInt(3, (Integer) periodo % 100);
@@ -104,7 +171,7 @@ public class Aplicacion {
 	 */
 	public static void genCsvAcu(Integer periodo) throws Exception {
 		System.out.print("genCsv2010Acu(" + periodo + ")");
-		CallableStatement statement = conn.prepareCall("{call genCsv2010Acu(?)}");
+		CallableStatement statement = connection.prepareCall("{call genCsv2010Acu(?)}");
 		statement.setInt(1, periodo);
 		statement.executeUpdate();
 		log.info(" - OK");
@@ -116,7 +183,7 @@ public class Aplicacion {
 	 */
 	public static void genCsvAlc(Integer periodo) throws Exception {
 		System.out.print("genCsv2010Alc(" + periodo + ")");
-		CallableStatement statement = conn.prepareCall("{call genCsv2010Alc(?)}");
+		CallableStatement statement = connection.prepareCall("{call genCsv2010Alc(?)}");
 		statement.setInt(1, periodo);
 		statement.executeUpdate();
 		log.info(" - OK");
@@ -135,7 +202,7 @@ public class Aplicacion {
 		
 		try {
 			writer = new PrintWriter(archivo, "ISO-8859-1");
-			stm = conn.createStatement();
+			stm = connection.createStatement();
 			ResultSet rs = stm.executeQuery(String.format("select linea from planocsv where periodo = %s and formato = '%s'", periodo, servicio));
 			while (rs.next()) {
 				writer.print(rs.getString("linea"));
